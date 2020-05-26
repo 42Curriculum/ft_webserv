@@ -12,39 +12,23 @@
 
 #include <string>
 #include <list>
+#include <map>
+#include <fstream>
+#include <iostream>
 
 class Data
 {
 private:
-	int port;
+//	int port;
 
-	std::string hostname;
+//	std::map<std::string, std::string> params;
 
-	std::string server_name;
-
-	std::string err_page;
-
-	std::string search_dir;
-
-	std::string dir_listing;
-
-	std::list<std::string> methods;
-
-	std::string uploads;
-
-	std::string uploads_dir;
+//	std::list<std::string> methods;
 public:
-	Data();
+	Data(){}
 	
-	~Data();
+	Data(std::string start){std::cout << start << std::endl;}
 
-	
+	~Data(){}
+
 };
-
-Data::Data(/* args */)
-{
-}
-
-Data::~Data()
-{
-}
