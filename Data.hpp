@@ -20,15 +20,42 @@ class Data
 {
 private:
 //	int port;
+	std::string key[11] = {
+		"port", 
+		"hostname", 
+		"server_name", 
+		"err_page", 
+		"body_size",
+		"search_dir", 
+		"dir_listing", 
+		"default_file",
+		"CGI_extension", 
+		"uploads",
+		"uploads_dir"
+		};
+	std::string defaults[11] = {
+		"port", 
+		"hostname", 
+		"server_name", 
+		"err_page", 
+		"body_size",
+		"search_dir", 
+		"dir_listing", 
+		"default_file",
+		"CGI_extension", 
+		"uploads",
+		"uploads_dir"
+		};
+	std::map<std::string, std::string>* params;
 
-//	std::map<std::string, std::string> params;
+	std::list<std::string> methods;
 
-//	std::list<std::string> methods;
 public:
-	Data(){}
+	Data();
 	
-	Data(std::string start){std::cout << start << std::endl;}
+	Data(std::string start);
 
 	~Data(){}
 
+	class MissingParamException : public std::exception {virtual const char* what() const throw();};
 };

@@ -31,7 +31,7 @@ int main()
 		return 0;
 	}
 	std::string content(std::istreambuf_iterator<char>(file),  (std::istreambuf_iterator<char>()));
-	while(pos  != std::string::npos)
+	while(pos  < content.length() - 1)
 	{
 		start = content.find("server", pos);
 		pos =  content.find("}", start);
