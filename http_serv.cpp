@@ -25,7 +25,7 @@ int main(int argc, char const *argv[])
     int server_fd, new_socket; long valread;
     struct sockaddr_in address;
     int client[30];
-    int i, activity, max_sd, sd;
+    int i, check_socket, max_sd, sd;
     int max_client = 30;
     int addrlen = sizeof(address);
     char buffer[1025];
@@ -84,25 +84,24 @@ int main(int argc, char const *argv[])
             // socket descriptor
             sd = client[i];
 
-            // if valid socket descriptor then add to read list
+            // if socket descriptor is valid, then add it to read list
             if (sd > 0)
                 FD_SET(sd, &read_fd);
 
-            // highest file descriptor number, need it for the select function
+            // If the descriptor number is over the max, set the max_sd as the number of descriptor
             if (sd > max_sd)
                 max_sd = sd;
         }
 
-        // wait for an activity on one of the sockets, timeout is NULL,
+        // wait for an check_socket on one of the sockets, timeout is NULL,
         // so wait indefinitely
-        activity = select(max_sd + 1, &read_fd, NULL, NULL, NULL);
+        check_socket = select(max_sd + 1, &read_fd, NULL, NULL, NULL);
 
-        if ((activity < 0) && (errno != EINTR))
+        if ((check_socket < 0) && (errno != EINTR))
         {
             printf("select error");
         }
-        //If something happened on the master socket ,  
-        //then its an incoming connection  
+        //If something happened on the new_socket, then it's an incoming connection
         if (FD_ISSET(server_fd, &read_fd))   
         {   
             if ((new_socket = accept(server_fd,  
@@ -112,10 +111,10 @@ int main(int argc, char const *argv[])
                 exit(EXIT_FAILURE);   
             }   
              
-            //inform user of socket number - used in send and receive commands  
+            //inform the user of socket number which used in send and receive commands  
             printf("New connection , socket fd is %d , ip is : %s , port : %d\n" , new_socket , inet_ntoa(address.sin_addr) , ntohs(address.sin_port));
            
-            //send new connection greeting message  
+            //send new connection message  
             if( send(new_socket, hello, strlen(hello), 0) != strlen(hello) )   
             {   
                 perror("send");   
@@ -123,7 +122,7 @@ int main(int argc, char const *argv[])
                  
             puts("Welcome message sent successfully");   
                  
-            //add new socket to array of sockets  
+            //add the new socket into the array of sockets  
             for (i = 0; i < max_client; i++)   
             {   
                 //if position is empty  
@@ -137,18 +136,17 @@ int main(int argc, char const *argv[])
             }   
         }   
              
-        //else its some IO operation on some other socket 
+        //else it's some IO operation on some other socket 
         for (i = 0; i < max_client; i++)   
         {   
             sd = client[i];   
                  
             if (FD_ISSET( sd , &read_fd))   
             {   
-                //Check if it was for closing , and also read the  
-                //incoming message  
+                //Check if it was for closing , and also read the incoming message  
                 if ((valread = read( sd , buffer, 1024)) == 0)   
                 {   
-                    //Somebody disconnected , get his details and print  
+                    //if socket is disconnected, get the details and print them
                     getpeername(sd , (struct sockaddr*)&address , (socklen_t*)&addrlen);   
                     printf("Host disconnected , ip %s , port %d \n" ,  
                           inet_ntoa(address.sin_addr) , ntohs(address.sin_port));   
@@ -161,8 +159,7 @@ int main(int argc, char const *argv[])
                 //Echo back the message that came in  
                 else 
                 {   
-                    //set the string terminating NULL byte on the end  
-                    //of the data read  
+                    //set the string terminating NULL byte on the end of the data read  
                     buffer[valread] = '\0';   
                     send(sd , buffer , strlen(buffer) , 0 );   
                 }   
