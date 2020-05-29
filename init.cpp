@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Data.hpp"
+#include "server.hpp"
 #include <vector>
 #include <sys/types.h>
 #include <iostream>
 #include <fstream>
 
-int main()
+std::list<Data> init()
 {
 	std::list<Data> servers;
 	std::ifstream file;
@@ -27,8 +27,7 @@ int main()
 	{
 		std::cout << "Config file missing, using default paramters\n";
 		servers.push_front(Data());
-		//return servers;
-		return 0;
+		return servers;
 	}
 	std::string content(std::istreambuf_iterator<char>(file),  (std::istreambuf_iterator<char>()));
 	while(pos  < content.length() - 1)
@@ -37,5 +36,5 @@ int main()
 		pos =  content.find("}", start);
 		servers.push_front(Data(content.substr(start, pos)));
 	}
-	return 0;
+	return servers;
 }

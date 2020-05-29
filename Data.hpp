@@ -10,11 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string>
-#include <list>
-#include <map>
-#include <fstream>
-#include <iostream>
+#ifndef DATA_HPP
+# define DATA_HPP
+# include <string>
+# include <list>
+# include <map>
+# include <fstream>
+# include <iostream>
 
 class Data
 {
@@ -59,3 +61,5 @@ public:
 
 	class MissingParamException : public std::exception {virtual const char* what() const throw();};
 };
+
+#endif

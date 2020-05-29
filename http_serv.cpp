@@ -6,30 +6,30 @@
 /*   By: jjosephi <jjosephi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/21 15:40:51 by jjosephi          #+#    #+#             */
-/*   Updated: 2020/05/22 05:05:56 by jjosephi         ###   ########.fr       */
+/*   Updated: 2020/05/28 15:22:11 by jjosephi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include "server.hpp"
 #include <sys/socket.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include <netinet/in.h>
-#include <string.h>
 #include <errno.h>
 #include <arpa/inet.h>
 
 #define PORT 8080
 int main(int argc, char const *argv[])
 {
-    int server_fd, new_socket; long valread;
+    int server_fd, new_socket;
+	long valread;
     struct sockaddr_in address;
     int client[30];
     int i, check_socket, max_sd, sd;
     int max_client = 30;
     int addrlen = sizeof(address);
     char buffer[1025];
+	std::list<Data> servers;
 
+	servers = init();
     // set of socket descriptors
     fd_set read_fd;
     
