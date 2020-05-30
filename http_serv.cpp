@@ -6,7 +6,7 @@
 /*   By: jjosephi <jjosephi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/21 15:40:51 by jjosephi          #+#    #+#             */
-/*   Updated: 2020/05/28 15:22:11 by jjosephi         ###   ########.fr       */
+/*   Updated: 2020/05/30 09:32:37 by jjosephi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,8 +154,7 @@ int main(int argc, char const *argv[])
                     //Close the socket and mark as 0 in list for reuse  
                     close( sd );   
                     client[i] = 0;   
-                }   
-                     
+                }
                 //Echo back the message that came in  
                 else 
                 {   

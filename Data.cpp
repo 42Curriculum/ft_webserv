@@ -55,5 +55,7 @@ Data::Data(std::string content)
 	}
 }
 
+int Data::get_port(){return std::stoi(params->operator[]("port"));}
+
 const char* Data::MissingParamException::what() const throw(){return "Missing Parameter";}
 
