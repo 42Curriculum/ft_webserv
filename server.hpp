@@ -13,6 +13,9 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
 # include "Data.hpp"
+# include <iostream>
+# include <sstream>
+# include <string>
 # include <string.h>
 # include <unistd.h>
 # include <stdlib.h>

@@ -6,7 +6,7 @@
 /*   By: jjosephi <jjosephi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/21 15:40:51 by jjosephi          #+#    #+#             */
-/*   Updated: 2020/05/30 09:32:37 by jjosephi         ###   ########.fr       */
+/*   Updated: 2020/05/30 09:35:37 by jjosephi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <errno.h>
 #include <arpa/inet.h>
 
-#define PORT 8080
+#define PORT 80
 int main(int argc, char const *argv[])
 {
     int server_fd, new_socket;
@@ -28,8 +28,9 @@ int main(int argc, char const *argv[])
     int addrlen = sizeof(address);
     char buffer[1025];
 	std::list<Data> servers;
+    std::string ss;
 
-	servers = init();
+	// servers = init();
     // set of socket descriptors
     fd_set read_fd;
     
@@ -67,7 +68,7 @@ int main(int argc, char const *argv[])
     }
 
     // accept the incoming connection
-    puts("Waiting for connections ...");
+    std::cout << "Waiting for connections ..." << std::endl;
 
     while(1)
     {
@@ -99,71 +100,72 @@ int main(int argc, char const *argv[])
 
         if ((check_socket < 0) && (errno != EINTR))
         {
-            printf("select error");
+            std::cout<< "select error" << std::endl;
         }
         //If something happened on the new_socket, then it's an incoming connection
-        if (FD_ISSET(server_fd, &read_fd))   
-        {   
-            if ((new_socket = accept(server_fd,  
-                    (struct sockaddr *)&address, (socklen_t*)&addrlen))<0)   
-            {   
-                perror("accept");   
-                exit(EXIT_FAILURE);   
-            }   
-             
-            //inform the user of socket number which used in send and receive commands  
-            printf("New connection , socket fd is %d , ip is : %s , port : %d\n" , new_socket , inet_ntoa(address.sin_addr) , ntohs(address.sin_port));
-           
-            //send new connection message  
-            if( send(new_socket, hello, strlen(hello), 0) != strlen(hello) )   
-            {   
-                perror("send");   
-            }   
-                 
-            puts("Welcome message sent successfully");   
-                 
-            //add the new socket into the array of sockets  
-            for (i = 0; i < max_client; i++)   
-            {   
-                //if position is empty  
-                if( client[i] == 0 )   
-                {   
-                    client[i] = new_socket;   
-                    printf("Adding to list of sockets as %d\n" , i);   
-                         
-                    break;   
-                }   
-            }   
-        }   
-             
-        //else it's some IO operation on some other socket 
-        for (i = 0; i < max_client; i++)   
-        {   
-            sd = client[i];   
-                 
-            if (FD_ISSET( sd , &read_fd))   
-            {   
-                //Check if it was for closing , and also read the incoming message  
-                if ((valread = read( sd , buffer, 1024)) == 0)   
-                {   
-                    //if socket is disconnected, get the details and print them
-                    getpeername(sd , (struct sockaddr*)&address , (socklen_t*)&addrlen);   
-                    printf("Host disconnected , ip %s , port %d \n" ,  
-                          inet_ntoa(address.sin_addr) , ntohs(address.sin_port));   
-                         
-                    //Close the socket and mark as 0 in list for reuse  
-                    close( sd );   
-                    client[i] = 0;   
+        if (FD_ISSET(server_fd, &read_fd))
+        {
+            if ((new_socket = accept(server_fd,
+                    (struct sockaddr *)&address, (socklen_t*)&addrlen))<0)
+            {
+                perror("accept");
+                exit(EXIT_FAILURE);
+            }
+
+            //inform the user of socket number which used in send and receive commands
+            std::cout << "New connection , socket fd is " << std::to_string(new_socket);
+            std::cout << " , ip is : " << inet_ntoa(address.sin_addr);
+            std::cout << " , port : " << std::to_string(ntohs(address.sin_port)) << std::endl;
+            //send new connection message
+            if( send(new_socket, hello, strlen(hello), 0) != strlen(hello) )
+            {
+                perror("send");
+            }
+
+            std::cout << "Welcome message sent successfully" << std::endl;
+
+            //add the new socket into the array of sockets
+            for (i = 0; i < max_client; i++)
+            {
+                //if position is empty
+                if( client[i] == 0 )
+                {
+                    client[i] = new_socket;
+                    std::cout << "Adding to list of sockets as " << std::to_string(i) << std::endl;
+                    break;
                 }
-                //Echo back the message that came in  
+            }
+        }
+
+        //else it's some IO operation on some other socket 
+        for (i = 0; i < max_client; i++)
+        {
+            sd = client[i];
+
+            if (FD_ISSET( sd , &read_fd))
+            {
+                //Check if it was for closing , and also read the incoming message
+                if ((valread = read( sd , buffer, 1024)) == 0)
+                {
+                    //if socket is disconnected, get the details and print them
+                    getpeername(sd , (struct sockaddr*)&address , (socklen_t*)&addrlen);
+                    std::cout << "Host disconnected , ip " << inet_ntoa(address.sin_addr);
+                    std::cout << " , port " << std::to_string(ntohs(address.sin_port)) << std::endl;
+
+                    //Close the socket and mark as 0 in list for reuse
+                    close( sd );
+                    client[i] = 0;
+                }
+
+                //Echo back the message that came in
                 else 
-                {   
-                    //set the string terminating NULL byte on the end of the data read  
-                    buffer[valread] = '\0';   
-                    send(sd , buffer , strlen(buffer) , 0 );   
-                }   
-            }   
-        }   
-    }   
+                {
+                    //set the string terminating NULL byte on the end of the data read
+                    buffer[valread] = '\0';
+                    send(sd , buffer , strlen(buffer) , 0 );
+                }
+            }
+        }
+    }
     return 0;
 }
