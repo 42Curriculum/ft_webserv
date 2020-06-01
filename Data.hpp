@@ -60,6 +60,7 @@ public:
 	~Data(){}
 
 	int get_port();
+	
 	class MissingParamException : public std::exception {virtual const char* what() const throw();};
 };
 

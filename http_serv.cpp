@@ -6,7 +6,7 @@
 /*   By: jjosephi <jjosephi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/21 15:40:51 by jjosephi          #+#    #+#             */
-/*   Updated: 2020/06/01 11:53:05 by jjosephi         ###   ########.fr       */
+/*   Updated: 2020/06/01 12:06:41 by jjosephi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int main(int argc, char const *argv[])
     char buffer[1025];
     struct sockaddr_in *address;
     struct timeval time_out;
-	std::list<Data> servers;
+	std::vector<Data> servers;
     std::string ss;
 
 	servers = init();
@@ -93,7 +93,7 @@ int main(int argc, char const *argv[])
 	{
 		address[n].sin_family = AF_INET;
 		address[n].sin_addr.s_addr = INADDR_ANY;
-		address[n].sin_port = htons( PORT );
+		address[n].sin_port = htons(servers[n].get_port());
 		rc[n] = bind(listen_sd[n], (struct sockaddr *)&address[n], sizeof(address[n]));
 		if (rc < 0)
 		{

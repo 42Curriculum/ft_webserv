@@ -16,9 +16,9 @@
 #include <iostream>
 #include <fstream>
 
-std::list<Data> init()
+std::vector<Data> init()
 {
-	std::list<Data> servers;
+	std::vector<Data> servers;
 	std::ifstream file;
 	int pos = 0, start = 0;
 
@@ -26,7 +26,7 @@ std::list<Data> init()
 	if (!(file.is_open()))
 	{
 		std::cout << "Config file missing, using default paramters\n";
-		servers.push_front(Data());
+		servers.push_back(Data());
 		return servers;
 	}
 	std::string content(std::istreambuf_iterator<char>(file),  (std::istreambuf_iterator<char>()));
@@ -34,7 +34,7 @@ std::list<Data> init()
 	{
 		start = content.find("server", pos);
 		pos =  content.find("}", start);
-		servers.push_front(Data(content.substr(start, pos)));
+		servers.push_back(Data(content.substr(start, pos)));
 	}
 	return servers;
 }

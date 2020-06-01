@@ -26,6 +26,6 @@
 # include <errno.h>
 # include <arpa/inet.h>
 
-std::list<Data> init();
+std::vector<Data> init();
 
 #endif
