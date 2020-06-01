@@ -25,6 +25,7 @@
 # include <netinet/in.h>
 # include <errno.h>
 # include <arpa/inet.h>
+# include <vector>
 
 std::vector<Data> init();
 

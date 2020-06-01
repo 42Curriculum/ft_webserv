@@ -24,6 +24,7 @@ Data::Data()
 }
 
 
+
 Data::Data(std::string content)
 {
 	size_t offset;
