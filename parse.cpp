@@ -93,7 +93,7 @@ std::map<std::string, std::string> parse_request_line(const char *s){
   request["Path"] = std::string(head, tail);
 
   //RFC 7230 3.1.1
-  if (tail - head > 20)
+  if (tail - head > 2000)
 	  throw_error(414);
   
   // Find HTTP version
