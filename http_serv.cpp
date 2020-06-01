@@ -6,7 +6,7 @@
 /*   By: jjosephi <jjosephi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/21 15:40:51 by jjosephi          #+#    #+#             */
-/*   Updated: 2020/05/30 09:35:37 by jjosephi         ###   ########.fr       */
+/*   Updated: 2020/05/31 16:20:12 by jjosephi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 #define PORT 80
 int main(int argc, char const *argv[])
 {
-    int server_fd, new_socket;
+    int *server_fd, new_socket;
 	long valread;
-    struct sockaddr_in address;
+    struct sockaddr_in *address;
     int client[30];
     int i, check_socket, max_sd, sd;
     int max_client = 30;
@@ -30,7 +30,7 @@ int main(int argc, char const *argv[])
 	std::list<Data> servers;
     std::string ss;
 
-	// servers = init();
+	servers = init();
     // set of socket descriptors
     fd_set read_fd;
     
@@ -42,25 +42,38 @@ int main(int argc, char const *argv[])
     {
         client[i] = 0;
     }
-
     // Creating socket file descriptor
-    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
-    {
-        perror("In socket");
-        exit(EXIT_FAILURE);
-    }    
+	server_fd = malloc(sizeof(int) * servers.size);
+    // if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+    // {
+    //     perror("In socket");
+    //     exit(EXIT_FAILURE);
+    // }
 
-    address.sin_family = AF_INET;
-    address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons( PORT );
-    
-    memset(address.sin_zero, '\0', sizeof address.sin_zero);
-        
-    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address))<0)
-    {
-        perror("In bind");
-        exit(EXIT_FAILURE);
-    }
+	for (int i = 0; i < servers.size(); i++)
+	{
+		address[i].sin_family = AF_INET;
+		address[i].sin_addr.s_addr = INADDR_ANY;
+		address[i].sin_port = htons(servers[i]);
+		memset(address[i].sin_zero, '\0', sizeof address.sin_zero);
+		if ((server_fd[i] = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+    	{
+        	perror("In socket");
+        	exit(EXIT_FAILURE);
+   		}
+		if (bind(server_fd[i], (struct sockaddr *)&address[i], sizeof(address[i]))<0)
+		{
+			perror("In bind");
+			exit(EXIT_FAILURE);
+		}
+	}
+	
+	
+    // if (bind(server_fd, (struct sockaddr *)&address, sizeof(address))<0)
+    // {
+    //     perror("In bind");
+    //     exit(EXIT_FAILURE);
+    // }
     if (listen(server_fd, 10) < 0)
     {
         perror("In listen");
