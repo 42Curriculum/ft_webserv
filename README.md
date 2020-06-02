@@ -96,8 +96,9 @@ In the config file, you should be able to :
 
 ## Testing  
 
-## Future 
-
+## Future
+- [ ] handle multiple servers with multiple clients
+- [ ] add read and write in server
 ## Mechanics  
 
 ## Credits  
