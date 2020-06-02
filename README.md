@@ -98,6 +98,7 @@ In the config file, you should be able to :
 
 ## Future
 - [ ] handle multiple servers with multiple clients
+- [ ] handle "Transport Endpoint is not connected" issue
 - [ ] add read and write in server
 ## Mechanics  
 
