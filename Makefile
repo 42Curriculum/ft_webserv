@@ -17,3 +17,7 @@ all: $(NAME)
 
 $(NAME) :
 	clang++ -std=c++11 http_serv.cpp init.cpp Data.cpp -o serv
+
+re :
+	rm -f serv
+	clang++ -std=c++11 http_serv.cpp init.cpp Data.cpp -o serv

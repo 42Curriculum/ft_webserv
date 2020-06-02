@@ -43,7 +43,6 @@ Data::Data(std::string content)
 			if (val == "")
 				std::cout << "Warning : Parameter \" " + key[i] + "\" was not set and will have a default value of : " + this->defaults[i] << std::endl;
 			params->operator[](key[i]) = val;
-			std::cout << "key : " << key[i] << " | value : " << val << std::endl;
 		}
 	}
 	std::istringstream str(content.substr(content.find("[") + 1, (content.find("]") - content.find("[") - 1)));
