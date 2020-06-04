@@ -27,6 +27,20 @@
 # include <arpa/inet.h>
 # include <vector>
 
-std::vector<Data> init();
+struct sockaddr_in;
+struct timeval;
+typedef struct s_loop_data
+{
+	int i, check_socket, on,max_sd, new_sd, size;
+	std::vector<int> *listen_sd;
+	std::vector<sockaddr_in> *address;
+	timeval time_out;
+	std::vector<Data> servers;
+	fd_set master_set, working_set; // set of socket descriptors
+}				t_loop_data;
+
+std::vector<Data> serv_init();
+t_loop_data &loop_init(std::vector<Data> servers);
+void slct_loop(t_loop_data* data);
 
 #endif

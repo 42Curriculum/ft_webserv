@@ -18,7 +18,7 @@
 #include <string.h>
 #include <arpa/inet.h>
 
-#define PORT 8081
+#define PORT 8080
 
 int main(int argc, char const *argv[])
 {

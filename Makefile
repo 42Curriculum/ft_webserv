@@ -20,4 +20,4 @@ $(NAME) :
 
 re :
 	rm -f serv
-	clang++ -std=c++11 http_serv.cpp init.cpp Data.cpp -o serv
+	clang++ -std=c++11 http_serv.cpp init.cpp slct_loop.cpp Data.cpp -o serv

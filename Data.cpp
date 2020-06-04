@@ -51,7 +51,6 @@ Data::Data(std::string content)
 	while (str >> word)
 	{
 		methods.push_back(word);
-		std::cout << "method " + word << std::endl;
 	}
 }
 
