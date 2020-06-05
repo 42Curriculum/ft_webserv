@@ -17,6 +17,7 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <arpa/inet.h>
+#include <sys/types.h>
 
 #define PORT 8080
 
@@ -26,6 +27,8 @@ int main(int argc, char const *argv[])
     struct sockaddr_in serv_addr;
     char hello[] = {"Hello from client"};
     char buffer[1024] = {0};
+	
+	fork();
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         printf("\n Socket creation error \n");
@@ -55,3 +58,4 @@ int main(int argc, char const *argv[])
     printf("%s\n",buffer );
     return 0;
 }
+////

@@ -66,18 +66,18 @@ We will consider that nginx is HTTP 1.1 compliant and may be used to compare hea
 - [x] It must be non-blocking and use only 1 select for all the IO between the client and the server (listens includes). [kosehy]
 - [ ] Select should check read and write at the same time.
 - [ ] Your server should never block and client should be bounce properly if necessary
-- [ ] You should never do a read operation or a write operation without going through select
+- [x] You should never do a read operation or a write operation without going through select
 - [ ] Checking the value of errno is strictly forbidden after a read or a write operation
 - [ ] A request to your server should never hang forever
 - [ ] Your server should have default error pages if none are provided
 - [ ] Your program should not leak and should never crash, even when out of memory if all the initialization is done
 - [ ] You can't use fork for something else than CGI (like php or perl or ruby etc...)
-- [ ] You can include and use everything in "iostream" "string" "vector" "list" "queue" "stack" "map" "algorithm"
+- [x] You can include and use everything in "iostream" "string" "vector" "list" "queue" "stack" "map" "algorithm"
 - [ ] Your program should have a config file in argument or use a default path
 - [ ] You can only use fcntl as flow: fcntl(fd, F_SETFL, O_NONBLOCK); Any other flags is forbidden
 
 In the config file, you should be able to :
-- [ ] choose the port and host of each "server"
+- [x] choose the port and host of each "server"
 - [ ] setup the server_names or not
 - [ ] The first server for a host:port will be the default for this host:port (meaning it will answer to all request that doesn't belong to the other server)
 - [ ] setup default error pages
@@ -97,9 +97,11 @@ In the config file, you should be able to :
 ## Testing  
 
 ## Future
-- [ ] handle multiple servers with multiple clients
-- [ ] handle "Transport Endpoint is not connected" issue
+- [x] handle multiple servers with multiple clients
+- [x] handle "Transport Endpoint is not connected" issue
 - [ ] add read and write in server
+- [ ] setup server_names
+- [ ] default parameters
 ## Mechanics  
 
 ## Credits  

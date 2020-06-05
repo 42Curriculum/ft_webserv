@@ -35,7 +35,7 @@ void slct_loop(t_loop_data* data)
         /* Call select() and wait 3 minutes for it to complete.               */
         /**********************************************************************/
         std::cout << "Waiting on select()..."  << std::to_string(data->listen_sd->operator[](1) + 1) << std::endl;
-        rc = select(data->listen_sd->operator[](1) + 1, &data->working_set, NULL, NULL, &data->time_out);
+        rc = select(data->listen_sd->operator[](data->size - 1) + 1, &data->working_set, NULL, NULL, &data->time_out);
 
         /**********************************************************************/
         /* Check to see if the select call failed.                            */
@@ -85,40 +85,43 @@ void slct_loop(t_loop_data* data)
 							// accepted each incoming conneciton. If accepted fails with
 							// EWOULDBLOCK, then we have accepteded all of them. Any
 							// other failure on accepted will cause us to end the
-							// server.
-				accepted.push_back(accept(data->listen_sd->operator[](i), NULL, NULL));
-				if (accepted.operator[](i) < 0)
+						// server.
+				int tmp = 0;
+				for (int n = 0;(tmp = accept(data->listen_sd->operator[](n), NULL, NULL)) > 0; n++)
 				{
-					if (errno != EWOULDBLOCK)
+					std::cout << "Accepted fd... "  << std::to_string(tmp) << std::endl;
+					accepted.push_back(tmp);
+					if (accepted.operator[](n) < 0)
 					{
-						perror(" accepted() failed");
-						end_server = 1;
+						if (errno != EWOULDBLOCK)
+						{
+							perror(" accepted() failed");
+							end_server = 1;
+						}
+						break;
 					}
-					break;
-				}
-							// Add the new incoming connections to the
-							// master read set
-				std::cout << " New incoming connection - ";
-				std::cout << std::to_string(accepted.operator[](i)) << std::endl;
-				FD_SET(accepted.operator[](i), &data->working_set);
-							// Loop back up and accepted another incoming connection
-					// 	} while (accepted.operator[](n) != -1);
-					// }
-					// // This is not the listening socket, therefore an existing
-					// // connection must be readable
-					// else
-					// {
-					// 	std::cout << " Descriptor " << std::to_string(i);
-				std::cout << " is readable" << std::endl;
-				close_conn = 0;
-						// Receive all incoming data on this socket before we loop
-						// back and call select again.
-				do
-				{
-					// Receive data on this connection until the recv
-					// fails with EWOULDBLOCK. If any other failure
-					// occurs, we will close the connection.
-					rc = recv(accepted.operator[](i), buffer, sizeof(buffer), 0);
+								// Add the new incoming connections to the
+								// master read set
+					std::cout << " New incoming connection - ";
+					std::cout << std::to_string(accepted.operator[](n)) << std::endl;
+					FD_SET(accepted.operator[](n), &data->working_set);
+								// Loop back up and accepted another incoming connection
+						// 	} while (accepted.operator[](n) != -1);
+						// }
+						// // This is not the listening socket, therefore an existing
+						// // connection must be readable
+						// else
+						// {
+						// 	std::cout << " Descriptor " << std::to_string(i);
+					std::cout << " is readable" << std::endl;
+					close_conn = 0;
+							// Receive all incoming data on this socket before we loop
+							// back and call select again.
+						// Receive data on this connection until the recv
+						// fails with EWOULDBLOCK. If any other failure
+						// occurs, we will close the connection.
+					rc = recv(accepted.operator[](n), buffer, sizeof(buffer), MSG_DONTWAIT);
+					std::cout << "Accepted..."  << std::string(buffer) << std::endl;
 					if (rc < 0)
 					{
 						if (errno != EWOULDBLOCK)
@@ -128,8 +131,7 @@ void slct_loop(t_loop_data* data)
 						}
 						break;
 					}
-
-					// CHeck to see if the connection has been closed
+					// Check to see if the connection has been closed
 					// by the client
 					if (rc == 0)
 					{
@@ -138,21 +140,23 @@ void slct_loop(t_loop_data* data)
 						break;
 					}
 
-					// Data was received
+						// Data was received
 					len = rc;
 					std::cout << " " << std::to_string(len);
 					std::cout << " bytes received" << std::endl;
 
 					// Echo the data back to the client
-					rc = send(accepted.operator[](i), buffer, len, 0);
+					rc = send(accepted.operator[](n), buffer, len, 0);
 					if (rc < 0)
 					{
 						perror(" send() failed");
 						close_conn = 1;
 						break;
 					}
-					
-				} while (1);
+					std::cout << "Reply" << std::endl;
+					memset(buffer, 0, sizeof(buffer));
+				}
+				
 				std::cout << "Success" << std::endl;
 
 				// If the close_conn flag was turned on, we need to clean up
@@ -162,13 +166,13 @@ void slct_loop(t_loop_data* data)
 				// the bits that are still turned on in the master set.
 				if (close_conn)
 				{
-					close(i);
+					//close(i);
 					FD_CLR(i, &data->working_set);
-					if (i == data->size)
-					{
-						while (FD_ISSET(data->size, &data->working_set) == 0)
-							data->size -= 1;
-					}
+					// if (i == data->size)
+					// {
+					// 	while (FD_ISSET(data->size, &data->working_set) == 0)
+					// 		data->size -= 1;
+					// }
 				}
 				// } // End of existing connection is readable
 			}
