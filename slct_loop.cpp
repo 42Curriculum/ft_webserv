@@ -124,11 +124,9 @@ void slct_loop(t_loop_data* data)
 					std::cout << "Accepted..."  << std::string(buffer) << std::endl;
 					if (rc < 0)
 					{
-						if (errno != EWOULDBLOCK)
-						{
-							perror(" recv() failed");
-							close_conn = 1;
-						}
+						
+						perror(" recv() failed");
+						close_conn = 1;
 						break;
 					}
 					// Check to see if the connection has been closed
