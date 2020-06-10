@@ -52,7 +52,7 @@ It must be conditionally compliant with the rfc 7230 to 7235 (http 1.1) but you 
 - [ ] Content-Location
 - [ ] Content-Type
 - [ ] Date
-- [ ] Host
+- [X] Host
 - [ ] Last-Modified
 - [ ] Location
 - [ ] Referer
@@ -76,18 +76,18 @@ We will consider that nginx is HTTP 1.1 compliant and may be used to compare hea
 - [ ] Your program should have a config file in argument or use a default path
 - [ ] You can only use fcntl as flow: fcntl(fd, F_SETFL, O_NONBLOCK); Any other flags is forbidden
 
-In the config file, you should be able to :
+In the config file, you shoul be able to :
 - [x] choose the port and host of each "server"
-- [ ] setup the server_names or not
-- [ ] The first server for a host:port will be the default for this host:port (meaning it will answer to all request that doesn't belong to the other server)
-- [ ] setup default error pages
+- [x] setup the server_names or not
+- [x] The first server for a host:port will be the default for this host:port (meaning it will answer to all request that doesn't belong to the other server)
+- [x] setup default error pages
 - [ ] limit client body size
 - [ ] setup routes with one or multiple of the following rules/configuration (routes won't be using regexp):
 
 ## Bonus part
 
 ## Dependencies  
-* A C language compiler most common would be GCC or Clang.
+* A C language compiler most codmmon would be GCC or Clang.
 * These were written to run on Unix based systems, it would likely work on a windows machine too but is currently untested. 
 
 ## Installation 
@@ -100,7 +100,7 @@ In the config file, you should be able to :
 - [x] handle multiple servers with multiple clients
 - [x] handle "Transport Endpoint is not connected" issue
 - [ ] add read and write in server
-- [ ] setup server_names
+- [x] setup server_names
 - [ ] default parameters
 ## Mechanics  
 

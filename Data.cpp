@@ -12,12 +12,13 @@
 
 #include "Data.hpp"
 #include <sstream>
+#include <vector>
 
 Data::Data()
 {
 	params = new std::map<std::string, std::string>();
 	/// need to discuss what default parameters should be //
-	for (int i = 0; i < 11; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		params->operator[](key[i]) = defaults[i];
 	}
@@ -29,7 +30,7 @@ Data::Data(std::string content)
 {
 	size_t offset;
 	params = new std::map<std::string, std::string>();
-	for (int i = 0; i < 11; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		if (content.find(key[i]) == content.npos)
 		{
@@ -40,17 +41,44 @@ Data::Data(std::string content)
 		{
 			offset = content.find(key[i]) + key[i].length() + 1;
 			std::string val = content.substr(offset, content.find("\n", offset) - offset);		
+/////////////////////////////////////////////////////////////////////////////////////////
+// THIS WILL NEED TO BE UNCOMMENTED. I ONLY COMMENTED IT BECAUSE IT"S ANNOYING AS HECK///
+/////////////////////////////////////////////////////////////////////////////////////////
 			if (val == "")
 				std::cout << "Warning : Parameter \" " + key[i] + "\" was not set and will have a default value of : " + this->defaults[i] << std::endl;
 			params->operator[](key[i]) = val;
 		}
 	}
-	std::istringstream str(content.substr(content.find("[") + 1, (content.find("]") - content.find("[") - 1)));
+	std::istringstream str(content.substr(content.find("err_page [") + 1, content.size()));
 	std::string word;
-
+	std::vector<int> vec;
+	bool isNum = true;
 	while (str >> word)
 	{
+		if (word == "]")
+			break ;
+		for (int i = 0; i < word.length(); i++)
+		{
+			if (!std::isdigit(word[i]))
+			{
+				isNum = false;
+				break ;
+			}
+		}
+		if (isNum)
+			vec.push_back(std::stoi(word));
+		else
+		{
+			for (int i = 0; i < vec.size(); i++)
+				error_pages.operator[](vec[i]) = word;
+		}
+	}
+	std::istringstream strmethod(content.substr(content.find("method [") + 1, content.size()));
+	while (strmethod >> word)
+	{
 		methods.push_back(word);
+		if (word == "]")
+		break ;
 	}
 }
 

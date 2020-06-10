@@ -1,0 +1,30 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    NOTES                                              :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jjosephi <jjosephi@student.42.us.org>      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/06/09 01:49:10 by jjosephi          #+#    #+#              #
+#    Updated: 2020/06/09 01:49:10 by jjosephi         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+There is still a lot to do...
+Most of the parsing could use with some more error checking. 
+I have yet to test if the error pages are handled correctly, but for that I need to create default erro pages first
+Tomorrow if I don't spend my time doing math, I will look at CGI and create the erro pages (this second bit shouldmt take long, although I don't have internet to find examples)
+I might also work on limiting body size, although as of now I am not quite sure what that means.
+Need to talk to the group about the default parameters and update them on my progress and define a course of action since internet will be down for 3 more days.
+Time is running out
+
+
+---------------------------------------------------------------------------
+
+THoughts about error pages :
+	Since we need default error pages anyways, I migth as well just have an int,str map with
+the error and its default value and change it if needed when parsing. It seems like the best solutio but I have to think about it more.
+Need to talk about all the other default values. Can't wait to be done and work on my own things
+~~Impossible to find one decent example of error page, everything is stupid feelsgood pages with too much embelisshment. Also impossible to inspect
+standard error page from my phone. I will delegate this task to someone that has access to a computer.
+I guess now I need to work on CGI and body_size

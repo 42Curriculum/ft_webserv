@@ -12,6 +12,7 @@
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
+
 # include "Data.hpp"
 # include <iostream>
 # include <sstream>
@@ -40,7 +41,12 @@ typedef struct s_loop_data
 }				t_loop_data;
 
 std::vector<Data> serv_init();
+
 t_loop_data &loop_init(std::vector<Data> servers);
+
 void slct_loop(t_loop_data* data);
 
+std::map<std::string, std::string> parse_headers(const char *s, int *error);
+
+std::map<std::string, std::string> parse_request_line(const char *s, int *error);
 #endif

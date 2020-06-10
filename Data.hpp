@@ -22,9 +22,9 @@ class Data
 {
 private:
 //	int port;
-	std::string key[11] = {
+	
+	std::string key[10] = {
 		"port", 
-		"hostname", 
 		"server_name", 
 		"err_page", 
 		"body_size",
@@ -35,9 +35,8 @@ private:
 		"uploads",
 		"uploads_dir"
 		};
-	std::string defaults[11] = {
+	std::string defaults[10] = {
 		"port", 
-		"hostname", 
 		"server_name", 
 		"err_page", 
 		"body_size",
@@ -48,11 +47,16 @@ private:
 		"uploads",
 		"uploads_dir"
 		};
-	std::map<std::string, std::string>* params;
 
-	std::list<std::string> methods;
 
 public:
+	
+	std::list<std::string> methods;
+
+	std::map<std::string, std::string>* params;
+	
+	std::map<int, std::string> error_pages;
+	
 	Data();
 	
 	Data(std::string start);
