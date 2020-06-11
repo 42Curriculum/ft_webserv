@@ -99,7 +99,7 @@ In the config file, you shoul be able to :
 ## Future
 - [x] handle multiple servers with multiple clients
 - [x] handle "Transport Endpoint is not connected" issue
-- [ ] add read and write in server
+- [x] add read and write in server
 - [x] setup server_names
 - [ ] default parameters
 ## Mechanics  
