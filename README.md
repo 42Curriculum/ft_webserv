@@ -65,7 +65,7 @@ It must be conditionally compliant with the rfc 7230 to 7235 (http 1.1) but you 
 We will consider that nginx is HTTP 1.1 compliant and may be used to compare headers and answer behaviors
 - [x] It must be non-blocking and use only 1 select for all the IO between the client and the server (listens includes). [kosehy]
 - [x] Select should check read and write at the same time.
-- [ ] Your server should never block and client should be bounce properly if necessary
+- [X] Your server should never block and client should be bounce properly if necessary
 - [x] You should never do a read operation or a write operation without going through select
 - [x] Checking the value of errno is strictly forbidden after a read or a write operation
 - [ ] A request to your server should never hang forever
