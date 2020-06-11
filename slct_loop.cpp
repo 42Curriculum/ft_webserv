@@ -26,16 +26,17 @@ void slct_loop(t_loop_data* data)
     while (end_server == 0)
     {
         /**********************************************************************/
-        /* Copy the master fd_set over to the working fd_set.                 */
+        /* Copy the master fd_set over to the working fd_set and writing set. */
         /**********************************************************************/
 		//FD_ZERO(&data->working_set);
         memcpy(&data->working_set, &data->master_set, sizeof(data->master_set));
+		memcpy(&data->writing_set, &data->master_set, sizeof(data->master_set));
 
         /**********************************************************************/
         /* Call select() and wait 3 minutes for it to complete.               */
         /**********************************************************************/
         std::cout << "Waiting on select()..."  << std::to_string(data->listen_sd->operator[](1) + 1) << std::endl;
-        rc = select(data->listen_sd->operator[](data->size - 1) + 1, &data->working_set, NULL, NULL, &data->time_out);
+        rc = select(data->listen_sd->operator[](data->size - 1) + 1, &data->working_set, &data->writing_set, NULL, &data->time_out);
 
         /**********************************************************************/
         /* Check to see if the select call failed.                            */
@@ -166,6 +167,7 @@ void slct_loop(t_loop_data* data)
 				{
 					//close(i);
 					FD_CLR(i, &data->working_set);
+					FD_CLR(i, &data->writing_set);
 					// if (i == data->size)
 					// {
 					// 	while (FD_ISSET(data->size, &data->working_set) == 0)

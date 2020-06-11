@@ -37,7 +37,7 @@ typedef struct s_loop_data
 	std::vector<sockaddr_in> *address;
 	timeval time_out;
 	std::vector<Data> servers;
-	fd_set master_set, working_set; // set of socket descriptors
+	fd_set master_set, working_set, reading_set, writing_set; // set of socket descriptors
 }				t_loop_data;
 
 std::vector<Data> serv_init();

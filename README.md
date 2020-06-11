@@ -64,17 +64,17 @@ It must be conditionally compliant with the rfc 7230 to 7235 (http 1.1) but you 
 
 We will consider that nginx is HTTP 1.1 compliant and may be used to compare headers and answer behaviors
 - [x] It must be non-blocking and use only 1 select for all the IO between the client and the server (listens includes). [kosehy]
-- [ ] Select should check read and write at the same time.
+- [x] Select should check read and write at the same time.
 - [ ] Your server should never block and client should be bounce properly if necessary
 - [x] You should never do a read operation or a write operation without going through select
-- [ ] Checking the value of errno is strictly forbidden after a read or a write operation
+- [x] Checking the value of errno is strictly forbidden after a read or a write operation
 - [ ] A request to your server should never hang forever
 - [ ] Your server should have default error pages if none are provided
 - [ ] Your program should not leak and should never crash, even when out of memory if all the initialization is done
 - [ ] You can't use fork for something else than CGI (like php or perl or ruby etc...)
 - [x] You can include and use everything in "iostream" "string" "vector" "list" "queue" "stack" "map" "algorithm"
 - [ ] Your program should have a config file in argument or use a default path
-- [ ] You can only use fcntl as flow: fcntl(fd, F_SETFL, O_NONBLOCK); Any other flags is forbidden
+- [x] You can only use fcntl as flow: fcntl(fd, F_SETFL, O_NONBLOCK); Any other flags is forbidden
 
 In the config file, you shoul be able to :
 - [x] choose the port and host of each "server"
