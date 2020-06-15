@@ -44,10 +44,16 @@ Data::Data(std::string content)
 /////////////////////////////////////////////////////////////////////////////////////////
 // THIS WILL NEED TO BE UNCOMMENTED. I ONLY COMMENTED IT BECAUSE IT"S ANNOYING AS HECK///
 /////////////////////////////////////////////////////////////////////////////////////////
-			if (val == "")
-				std::cout << "Warning : Parameter \" " + key[i] + "\" was not set and will have a default value of : " + this->defaults[i] << std::endl;
+			// if (val == "")
+			// 	std::cout << "Warning : Parameter \" " + key[i] + "\" was not set and will have a default value of : " + this->defaults[i] << std::endl;
 			params->operator[](key[i]) = val;
 		}
+	}
+	for (int i = 400; i < 505; i++)
+	{
+		error_pages[i] ="err_pages/" + std::to_string(i) + ".html";
+		if (i == 417)
+			i = 499;
 	}
 	std::istringstream str(content.substr(content.find("err_page [") + 1, content.size()));
 	std::string word;

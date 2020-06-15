@@ -15,9 +15,11 @@
 void slct_loop(t_loop_data* data)
 {
 	int desc_ready, close_conn, end_server = 0, rc, len;
-	int selected;
+	int selected, port;
 	int max_fd;
 	char buffer[1025];
+	char *response;
+	struct sockaddr_in addr;
 	std::vector<int> accepted;
 	/**************************************************************************/
     /* Loop waiting for incoming connects or for incoming data on any of the  */
@@ -79,7 +81,7 @@ void slct_loop(t_loop_data* data)
 				// 	{
 				// 		std::cout << " Listening socket is readable" << std::endl;
 				// 		// accepted all incoming connections that are qeueued up on the
-				// 		// listenning socket before we loop back and call 
+				// 		// listenning socket before we loop back and call
 				// 		// select again.
 						// do
 						// {
@@ -125,7 +127,7 @@ void slct_loop(t_loop_data* data)
 					std::cout << "Accepted..."  << std::string(buffer) << std::endl;
 					if (rc < 0)
 					{
-						
+
 						perror(" recv() failed");
 						close_conn = 1;
 						break;
@@ -143,9 +145,16 @@ void slct_loop(t_loop_data* data)
 					len = rc;
 					std::cout << " " << std::to_string(len);
 					std::cout << " bytes received" << std::endl;
-
+					if (rc > 0)
+					{
+						bzero(&addr, sizeof(addr));
+						int len = sizeof(addr);
+						getsockname(listen_sd->operator[](n), (struct sockaddr *) &addr, &len);
+						port = ntohs(my_addr.sin_port);
+						process(data->servers, port, buffer);
+						rc = send(accepted.operator[](n),s , std::string(s).length(), 0);
+					}
 					// Echo the data back to the client
-					rc = send(accepted.operator[](n), buffer, len, 0);
 					if (rc < 0)
 					{
 						perror(" send() failed");
@@ -155,7 +164,7 @@ void slct_loop(t_loop_data* data)
 					std::cout << "Reply" << std::endl;
 					memset(buffer, 0, sizeof(buffer));
 				}
-				
+
 				std::cout << "Success" << std::endl;
 
 				// If the close_conn flag was turned on, we need to clean up

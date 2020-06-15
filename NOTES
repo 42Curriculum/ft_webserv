@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 There is still a lot to do...
-Most of the parsing could use with some more error checking. 
+Most of the parsing could use with some more error checking.
 I have yet to test if the error pages are handled correctly, but for that I need to create default erro pages first
 Tomorrow if I don't spend my time doing math, I will look at CGI and create the erro pages (this second bit shouldmt take long, although I don't have internet to find examples)
 I might also work on limiting body size, although as of now I am not quite sure what that means.
@@ -28,3 +28,24 @@ Need to talk about all the other default values. Can't wait to be done and work 
 ~~Impossible to find one decent example of error page, everything is stupid feelsgood pages with too much embelisshment. Also impossible to inspect
 standard error page from my phone. I will delegate this task to someone that has access to a computer.
 I guess now I need to work on CGI and body_size
+
+--------------------------------------------------------------------------
+
+I now understand everything about webserver. Plan is as follows :
+
+Today :
+	-Improve the parsing, it is incomplete at best. <- fakew news, request parsing is fine. COnfig parsing can be improved still
+	-Inplement the methods : []GET []POST []HEAD []PUT []DELETE []CONNECT []OPTIONS []TRACE
+Tomorrow :
+	- Work on return message ;
+	- Implement CGI
+	- Rest of the stuff under the config part part of the pdf
+
+Please discard the above. Started working on response as I realized that implementing the methods implies implementing response;
+
+FOr the error pages, I'm debating whether I should make a map of every single error and their path
+and replace the ones specified in the config file or make a map with only what is specified.
+-----------------------------------------------------------------------------
+Decided to go with the first option. I am done for my part, however,I am using system for post, put and delete request... which is less than secure
+Need to add scurity warning to readme. Might fix it later, but most likely not, I have other things to do.
+

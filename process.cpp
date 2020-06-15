@@ -18,11 +18,26 @@ const char* process_request(std::vector<Data> data, int port,const char *msg)
 {
 	std::map<std::string, std::string> request;
 	std::map<std::string, std::string> lines;
+	char *response;
 	Data *config = nullptr;
 	int error;
 
+
+	error = 200;
+	std::map<std::string, std::string> lines, Data data)> funcs;
+	if (data.params["body_size"] != "" && std::stoi(data.params["body_size"]) < 0)
+		error = 413;
+	if (request["Content-Lentgh"] == "" )
+		error = 401;
+	funcs["GET"] = req_get_head;
+	funcs["HEAD"] = *req_get_head;
+	funcs["POST"] = *req_post;
+	funcs["PUT"] = *req_put;
+	funcs["DELETE"] = *req_delete;
+	funcs["OPTIONS"] = *req_options;
+	funcs["TRACE"] = *req_trace;
 	request = parse_headers(msg, &error);
-	lines = parse
+	lines = parse_request_line(msg, &error);
 	//Find the correct config file to use for the current request or get the default one if none was found
 	for (int i = 0; i < data.size(); i++)
 	{
@@ -38,46 +53,44 @@ const char* process_request(std::vector<Data> data, int port,const char *msg)
 			}
 		}
 	}
-	std::list<string>::iterator it = config->methods.begin();
-	for(; it != config->methods.end; it++)
+	std::list<std::string>::iterator it = config->methods.begin();
+	for(; it != config->methods.end(); it++)
 	{
-		if (lines.count(it))
+		if (lines["Type"] == *it)
 			break ;
 	}
 	if (it == config->methods.end())
-		std::cout << "Methd not allowed" << std::endl;
-	if (error > 0)
+		error = 501;
+	if (errors > 200)
 	{
-		if (config->error_pages.count(error))
-			return config->error_pages[error].c_str();
-		else
-		{
-			std::string err_file;
-			err_file =  "err_pages/" + std::to_string(error) + ".html";
-			return err_file.c_str();
-		}
+		s = req_error(lines, data , error);
+		return s;
 	}
+	s = (*funcs[lines["Types"])(request,lines, data, error);
 	// std::cout << data.operator[](i).params->operator[]("server_name") << std::endl;
-	return config->params->operator[]("server_name").c_str();
+	return s;
 }
 
-int main()
-{
-	  const char *s = 
-	        "GET / HTTP/1.1\r\n"
-			"Host: index/8080\r\n"
-            "Connection: keep-alive\r\n"
-            "Upgrade-Insecure-Requests: 1\r\n"
-            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"
-            "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0.3 Safari/604.5.6\r\n"
-            "Accept-Language: en-us\r\n"
-            "DNT: 1\r\n"
-            "Accept-Encoding: gzip, deflate\r\n"
-            "\r\n"
-            "Usually GET requests don\'t have a body\r\n"
-            "But I don\'t care in this case :)";
-	std::vector<Data> servers;
+// int main()
+// {
+// 	  const char *s =
+// 	        "GET / HTTP/1.1\r\n"
+// 			"Host: index/8080\r\n"
+//             "Connection: keep-alive\r\n"
+//             "Upgrade-Insecure-Requests: 1\r\n"
+//             "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"
+//             "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0.3 Safari/604.5.6\r\n"
+//             "Accept-Language: en-us\r\n"
+//             "DNT: 1\r\n"
+//             "Accept-Encoding: gzip, deflate\r\n"
+//             "\r\n"
+//             "Usually GET requests don\'t have a body\r\n"
+//             "But I don\'t care in this case :)";
+// 	std::vector<Data> servers;
 
-	servers = serv_init();
-	std::cout << process_request(servers, 8080, s) << std::endl;
-}
+// 	//servers = serv_init();
+// 	//std::cout << process_request(servers, 8080, s) << std::endl;
+// 	std::map<std::string, char* (*func)(std::map<std::string, std::string> request,
+
+
+// }

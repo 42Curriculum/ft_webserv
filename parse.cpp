@@ -6,7 +6,7 @@
 /*   By: jjosephi <jjosephi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 21:59:47 by jjosephi          #+#    #+#             */
-/*   Updated: 2020/06/07 15:24:52 by jjosephi         ###   ########.fr       */
+/*   Updated: 2020/06/15 00:42:00 by jjosephi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,46 +37,7 @@ inline std::string& trim(std::string& s, const char* t = ws)
     return ltrim(rtrim(s, t), t);
 }
 
-int throw_error(size_t error_num) {
-  std::map<std::string, std::string> errors;
-  std::string error_code = std::to_string(error_num);
-  errors["400"] = "Bad Request";
-  errors["401"] = "Unauthorized";
-  errors["402"] = "Payment Required";
-  errors["403"] = "Forbidden";
-  errors["404"] = "Not Found";
-  errors["405"] = "Method Not Allowed";
-  errors["406"] = "Not Acceptable";
-  errors["407"] = "Proxy Authentication Required";
-  errors["408"] = "Request Timeout";
-  errors["409"] = "Conflict";
-  errors["410"] = "Gone";
-  errors["411"] = "Length Required";
-  errors["412"] = "Precondition Failed";
-  errors["413"] = "Payload Too Large";
-  errors["414"] = "URI Too Long";
-  errors["415"] = "Unsupported Media Type";
-  errors["416"] = "Range Not Satisfiable";
-  errors["417"] = "Expectation Failed";
-  errors["418"] = "I'm a teapot";
-  errors["421"] = "Misdirected Request";
-  errors["422"] = "Unprocessable Entity (WebDAV)";
-  errors["423"] = "Locked (WebDAV)";
-  errors["424"] = "Failed Dependency (WebDAV)";
-  errors["425"] = "Too Early";
-  errors["426"] = "Upgrade Required";
-  errors["428"] = "Precondition Required";
-  errors["429"] = "Too Many Requests";
-  errors["431"] = "Request Header Fields Too Large";
-  errors["451"] = "Unavailable For Legal Reasons";
-
-
-  if (errors.find(error_code) != errors.end())
-    std::cout << errors[error_code] << std::endl;
-  exit(1);
-}
-
-std::map<std::string, std::string> parse_request_line(const char *s, int *error){ 
+std::map<std::string, std::string> parse_request_line(const char *s, int *error){
   std::map<std::string, std::string> request;
   const char *head = s;
   const char *tail = s;
@@ -95,7 +56,7 @@ std::map<std::string, std::string> parse_request_line(const char *s, int *error)
   if (tail - head > 8)
 	  *error = 501;
 
-  
+
   // Find path
   while (tail != msg_end && *tail == ' ') ++tail;
   head = tail;
@@ -105,7 +66,7 @@ std::map<std::string, std::string> parse_request_line(const char *s, int *error)
   //RFC 7230 3.1.1
   if (tail - head > 2000)
 	  *error = 414;
-  
+
   // Find HTTP version
   while (tail != msg_end && *tail == ' ') ++tail;
   head = tail;
@@ -115,7 +76,7 @@ std::map<std::string, std::string> parse_request_line(const char *s, int *error)
   return (request);
 }
 
-std::map<std::string, std::string> parse_headers(const char *s, int *error){ 
+std::map<std::string, std::string> parse_headers(const char *s, int *error){
   std::map<std::string, std::string> headers;
   std::string header;
   std::string::size_type index;
@@ -126,20 +87,20 @@ std::map<std::string, std::string> parse_headers(const char *s, int *error){
     if(index != std::string::npos) {
 	  std::string key = header.substr(0, index);
 	  std::string value = header.substr(index + 1);
-	  // RFC 7230, 3.2.4 
+	  // RFC 7230, 3.2.4
 	  if (key.find(' ') != std::string::npos)
 		  *error = 400;
       headers.insert(std::make_pair(
-        trim(key, ws), 
+        trim(key, ws),
         trim(value, ws)
       ));
     }
   }
 
   //RFC 7230 5.4
-  if (headers.find("Host") == headers.end() ) 
+  if (headers.find("Host") == headers.end() )
 	  *error = 400;
-
+	headers["request"] = std::string(s);
   return (headers);
 }
 
@@ -149,7 +110,7 @@ std::map<std::string, std::string> parse_headers(const char *s, int *error){
 
 // int main(int argc, char* argv[]) {
 //   //Random request message here
-//   const char *s = 
+//   const char *s =
 // 	        "GET / HTTP/1.1\r\n"
 // 			"Host: index/8080"
 //             "Connection: keep-alive\r\n"
@@ -163,7 +124,7 @@ std::map<std::string, std::string> parse_headers(const char *s, int *error){
 //             "Usually GET requests don\'t have a body\r\n"
 //             "But I don\'t care in this case :)";
 
-  
+
 //   //TODO: Parse body of the request
 //   std::map<std::string, std::string> request = parse_request_line(s);
 //   std::map<std::string, std::string> headers = parse_headers(s);
