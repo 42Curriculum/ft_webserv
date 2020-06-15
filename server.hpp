@@ -30,6 +30,8 @@
 # include <sstream>
 
 std::map<int, std::string> errors{
+  errors[200] = " OK";
+  errors[201] = " Created";
   errors[204] = " No Content";
   errors[400] = " Bad Request";
   errors[401] = " Unauthorized"`	;
