@@ -1,7 +1,7 @@
 # Webserver
-#IMPORTANT : This server uses system() for POST, PUT and DELETE requests, and therefore is NOT SECURE.
-#I might or might not fix this, so in the meantime....
-#Don't use it :)
+## IMPORTANT : This server uses system() for POST, PUT and DELETE requests, and therefore is NOT SECURE.
+## I might or might not fix this, so in the meantime....
+## Don't use it :)
 ### Table Of Contents
 * [Introduction](#introduction)
 * [Objective](#objective)
