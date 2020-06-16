@@ -61,7 +61,7 @@ const char* process_request(std::vector<Data> data, int port,const char *msg)
 	}
 	if (it == config->methods.end())
 		error = 501;
-	if (errors > 200)
+	if (error > 200)
 	{
 		s = req_error(lines, data , error);
 		return s;

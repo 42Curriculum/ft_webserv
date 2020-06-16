@@ -13,14 +13,18 @@
 #include "server.hpp"
 #include <fstream>
 #include <time.h>
-#include <filesystem>
+#include <experimental/filesystem>
 
 
 char *req_error(std::map<std::string, std::string> lines, Data data, int error)
 {
+	std::string response;
 	std::ifstream fd;
-	std::string file;
+	std::string file, extension, path;
 
+	if (data.params["search_dir"] != "")
+		path = data.params["search_dir"];
+	file = path + lines["Path"];
 	fd.open(data.error_pages[errors]);
 	while(std::getline(fd, file));
 	response = "HTTP/1.1 " + std::to_string(error) + errors[error] + "\nDate: "//date here
@@ -79,7 +83,7 @@ char *req_post(std::map<std::string, std::string> request,
 	}
 	response = "HTTP/1.1 " + std::to_string(error) + errors[error] + "\nDate: " //date here
 	+ "Last-Modified" + "\nContent-Language: en\n" + "Content-Length: " + "77" + "\nContent-Type: text/html" +
-	"\n" + "Content-Location: "+ path + "\nServer: ft_webserv" +
+	"\n" + "Content-Location: "+ path + "\nServer: ft_webserv";
 	if (error == 200)
 		response = response + "<html>\n<body>\n<h1>Request was Processed Successfully</h1>\n</body>\n</html>";
 	else

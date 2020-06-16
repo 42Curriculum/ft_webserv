@@ -29,41 +29,41 @@
 # include <vector>
 # include <sstream>
 
-std::map<int, std::string> errors{
-  errors[200] = " OK";
-  errors[201] = " Created";
-  errors[204] = " No Content";
-  errors[400] = " Bad Request";
-  errors[401] = " Unauthorized"`	;
-  errors[402] = " Payment Required";
-  errors[403] = " Forbidden";
-  errors[404] = " Not Found";
-  errors[405] = " Method Not Allowed";
-  errors[406] = " Not Acceptable";
-  errors[407] = " Proxy Authentication Required";
-  errors[408] = " Request Timeout";
-  errors[409] = " Conflict";
-  errors[410] = " Gone";
-  errors[411] = " Length Required";
-  errors[412] = " Precondition Failed";
-  errors[413] = " Payload Too Large";
-  errors[414] = " URI Too Long";
-  errors[415] = " Unsupported Media Type";
-  errors[416] = " Range Not Satisfiable";
-  errors[417] = " Expectation Failed";
-  errors[418] = " I'm a teapot";
-  errors[421] = " Misdirected Request";
-  errors[422] = " Unprocessable Entity (WebDAV)";
-  errors[423] = " Locked (WebDAV)";
-  errors[424] = " Failed Dependency (WebDAV)";
-  errors[425] = " Too Early";
-  errors[426] = " Upgrade Required";
-  errors[428] = " Precondition Required";
-  errors[429] = " Too Many Requests";
-  errors[431] = " Request Header Fields Too Large";
-  errors[451] = " Unavailable For Legal Reasons";
-  errors[501] = " Not Implemented";
-}
+std::map<int, std::string> errors = {
+  {200, " OK"},
+  {201, "Created"},
+  {204, "No Content"},
+  {400, "Bad Request"},
+  {401, "Unauthorized"},
+  {402, "Payment Required"},
+  {403, "Forbidden"},
+  {404, "Not Found"},
+  {405, "Method Not Allowed"},
+  {406, "Not Acceptable"},
+  {407, "Proxy Authentication Required"},
+  {408, "Request Timeout"},
+  {409, "Conflict"},
+  {410, "Gone"},
+  {411, "Length Required"},
+  {412, "Precondition Failed"},
+  {413, "Payload Too Large"},
+  {414, "URI Too Long"},
+  {415, "Unsupported Media Type"},
+  {416, "Range Not Satisfiable"},
+  {417, "Expectation Failed"},
+  {418, "I'm a teapot"},
+  {421, "Misdirected Request"},
+  {422, "Unprocessable Entity (WebDAV)"},
+  {423, "Locked (WebDAV)"},
+  {424, "Failed Dependency (WebDAV)"},
+  {425, "Too Early"},
+  {426, "Upgrade Required"},
+  {428, "Precondition Required"},
+  {429, "Too Many Requests"},
+  {431, "Request Header Fields Too Large"},
+  {451, "Unavailable For Legal Reasons"},
+  {501, "Not Implemented"},
+};
 
 
 struct sockaddr_in;
@@ -95,7 +95,7 @@ std::map<std::string, std::string> parse_request_line(const char *s, int *error)
 char *req_error(std::map<std::string, std::string> lines, Data data, int error);
 
 char *req_get_head(std::map<std::string, std::string> request,
-	std::map<std::string, std::string> lines, Data data, int error)
+	std::map<std::string, std::string> lines, Data data, int error);
 
 char *req_post(std::map<std::string, std::string> request,
 	std::map<std::string, std::string> lines, Data data);
