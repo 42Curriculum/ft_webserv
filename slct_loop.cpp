@@ -149,10 +149,10 @@ void slct_loop(t_loop_data* data)
 					{
 						bzero(&addr, sizeof(addr));
 						int len = sizeof(addr);
-						getsockname(listen_sd->operator[](n), (struct sockaddr *) &addr, &len);
-						port = ntohs(my_addr.sin_port);
-						process(data->servers, port, buffer);
-						rc = send(accepted.operator[](n),s , std::string(s).length(), 0);
+						//getsockname(data->listen_sd->operator[](n), (struct sockaddr *) &addr, &len);
+						port = ntohs(addr.sin_port);
+						process_request(data->servers, port, buffer);
+						rc = send(accepted.operator[](n), s, std::string(s).length(), 0);
 					}
 					// Echo the data back to the client
 					if (rc < 0)
