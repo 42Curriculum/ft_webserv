@@ -18,7 +18,7 @@ void slct_loop(t_loop_data* data)
 	int selected, port;
 	int max_fd;
 	char buffer[1025];
-	char *response;
+	char *s;
 	struct sockaddr_in addr;
 	std::vector<int> accepted;
 	/**************************************************************************/

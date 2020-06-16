@@ -14,7 +14,8 @@
 
 std::string get_extension(std::string filename)
 {
-	for (int i = 0; i < filename.length(); i++)
+	int i = 0;
+	for (; i < filename.length(); i++)
 	{
 		if (filename[i] == '.')
 			break;

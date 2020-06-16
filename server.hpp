@@ -29,41 +29,7 @@
 # include <vector>
 # include <sstream>
 
-std::map<int, std::string> errors = {
-  {200, " OK"},
-  {201, "Created"},
-  {204, "No Content"},
-  {400, "Bad Request"},
-  {401, "Unauthorized"},
-  {402, "Payment Required"},
-  {403, "Forbidden"},
-  {404, "Not Found"},
-  {405, "Method Not Allowed"},
-  {406, "Not Acceptable"},
-  {407, "Proxy Authentication Required"},
-  {408, "Request Timeout"},
-  {409, "Conflict"},
-  {410, "Gone"},
-  {411, "Length Required"},
-  {412, "Precondition Failed"},
-  {413, "Payload Too Large"},
-  {414, "URI Too Long"},
-  {415, "Unsupported Media Type"},
-  {416, "Range Not Satisfiable"},
-  {417, "Expectation Failed"},
-  {418, "I'm a teapot"},
-  {421, "Misdirected Request"},
-  {422, "Unprocessable Entity (WebDAV)"},
-  {423, "Locked (WebDAV)"},
-  {424, "Failed Dependency (WebDAV)"},
-  {425, "Too Early"},
-  {426, "Upgrade Required"},
-  {428, "Precondition Required"},
-  {429, "Too Many Requests"},
-  {431, "Request Header Fields Too Large"},
-  {451, "Unavailable For Legal Reasons"},
-  {501, "Not Implemented"},
-};
+extern std::map<int, std::string> errors;
 
 
 struct sockaddr_in;
@@ -92,25 +58,25 @@ std::map<std::string, std::string> parse_headers(const char *s, int *error);
 std::map<std::string, std::string> parse_request_line(const char *s, int *error);
 
 /*requests.cpp*/
-char *req_error(std::map<std::string, std::string> lines, Data data, int error);
+ const char *req_error(std::map<std::string, std::string> lines, Data data, int error);
 
-char *req_get_head(std::map<std::string, std::string> request,
+ const char *req_get_head(std::map<std::string, std::string> request,
 	std::map<std::string, std::string> lines, Data data, int error);
 
-char *req_post(std::map<std::string, std::string> request,
-	std::map<std::string, std::string> lines, Data data);
+ const char *req_post(std::map<std::string, std::string> request,
+	std::map<std::string, std::string> lines, Data data, int error);
 
-char *req_put(std::map<std::string, std::string> request,
-	std::map<std::string, std::string> lines, Data data);
+ const char *req_put(std::map<std::string, std::string> request,
+	std::map<std::string, std::string> lines, Data data, int error);
 
-char *req_delete(std::map<std::string, std::string> request,
-	std::map<std::string, std::string> lines, Data data);
+ const char *req_delete(std::map<std::string, std::string> request,
+	std::map<std::string, std::string> lines, Data data, int error);
 
-char *req_options(std::map<std::string, std::string> request,
-	std::map<std::string, std::string> lines, Data data);
+ const char *req_options(std::map<std::string, std::string> request,
+	std::map<std::string, std::string> lines, Data data, int error);
 
-char *req_trace(std::map<std::string, std::string> request,
-	std::map<std::string, std::string> lines, Data data);
+ const char *req_trace(std::map<std::string, std::string> request,
+	std::map<std::string, std::string> lines, Data data, int error);
 
 /*utils.cpp*/
 std::string get_extension(std::string filename);

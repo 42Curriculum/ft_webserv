@@ -16,23 +16,25 @@
 #include <experimental/filesystem>
 
 
-char *req_error(std::map<std::string, std::string> lines, Data data, int error)
+const char *req_error(std::map<std::string, std::string> lines, Data data, int error)
 {
 	std::string response;
 	std::ifstream fd;
 	std::string file, extension, path;
 
-	if (data.params["search_dir"] != "")
-		path = data.params["search_dir"];
+	if (data.params->operator[]("search_dir") != "")
+		path = data.params->operator[]("search_dir");
 	file = path + lines["Path"];
-	fd.open(data.error_pages[errors]);
+	fd.open(data.error_pages.at(error));
 	while(std::getline(fd, file));
 	response = "HTTP/1.1 " + std::to_string(error) + errors[error] + "\nDate: "//date here
 	+ "Last-Modified" + "\nContent-Language: en\n" + "Content-Length: " + std::to_string(file.length()) + "\nContent-Type: " + extension +
 	"\n" + "Content-Location: "+ path + "\nServer: ft_webserv" + file;
+
+	return response.c_str();
 }
 
-char *req_get_head(std::map<std::string, std::string> request,
+const char *req_get_head(std::map<std::string, std::string> request,
 	std::map<std::string, std::string> lines, Data data, int error)
 {
 	std::string response;
@@ -40,8 +42,8 @@ char *req_get_head(std::map<std::string, std::string> request,
 	std::ifstream fd;
 	int size;
 
-	if (data.params["search_dir"] != "")
-		path = data.params["search_dir"];
+	if (data.params->operator[]("search_dir") != "")
+		path = data.params->operator[]("search_dir");
 	file = path + lines["Path"];
 	fd.open(file);
 	std::cout << "file path :" + file << std::endl;
@@ -49,7 +51,7 @@ char *req_get_head(std::map<std::string, std::string> request,
 		error = 404;
 	while (std::getline(fd, file));
 	size = file.size();
-	if (std::stoi(data.params["body_size"]) < size)
+	if (std::stoi(data.params->operator[]("body_size")) < size)
 		error = 413;
 	//insert error if file empty or exceeds body_max
 	response = "HTTP/1.1 " + std::to_string(error) + errors[error] + "\nDate: " //date here
@@ -57,21 +59,21 @@ char *req_get_head(std::map<std::string, std::string> request,
 	"\n" + "Content-Location: "+ path + "\nServer: ft_webserv";
 	if (lines["Type"] == "GET" && error == 200)
 		response = response + file;
-	return file.c_str();
+	return response.c_str();
 }
 
-char *req_post(std::map<std::string, std::string> request,
+const char *req_post(std::map<std::string, std::string> request,
 	std::map<std::string, std::string> lines, Data data, int error)
 {
 	std::string response;
 	std::string file, extension, path;
 	std::ifstream fd;
 	int size;
-	if (data.params["search_dir"] != "")
-		path = data.params["search_dir"];
+	if (data.params->operator[]("search_dir") != "")
+		path = data.params->operator[]("search_dir");
 	file = path + lines["Path"];
 	extension = get_extension(lines["Path"]);
-	if (extension != data.params["CGI_extension"])
+	if (extension != data.params->operator[]("CGI_extension"))
 		error = 501;
 	else
 	{
@@ -88,10 +90,10 @@ char *req_post(std::map<std::string, std::string> request,
 		response = response + "<html>\n<body>\n<h1>Request was Processed Successfully</h1>\n</body>\n</html>";
 	else
 		response = response + "<html>\n<body>\n<h1>Request not Processed Successfully</h1>\n</body>\n</html>";
-	return file.c_str();
+	return response.c_str();
 }
 
-char *req_put(std::map<std::string, std::string> request,
+const char *req_put(std::map<std::string, std::string> request,
 	std::map<std::string, std::string> lines, Data data,int error)
 {
 	std::string response;
@@ -101,15 +103,15 @@ char *req_put(std::map<std::string, std::string> request,
 
 	if (error == 200)
 		error = 201;
-	if (data.params["uploads"] == "yes")
+	if (data.params->operator[]("uploads") == "yes")
 	{
-		file = data.params["uploads_dir"] + lines["Path"];
+		file = data.params->operator[]("uploads_dir") + lines["Path"];
 		fd.open(file);
 		if (fd.is_open())
 			error = 409;
 		else
 		{
-			path = "echo " + request["Body"] + ">" + data.params["uploads_dir"] + lines["Path"];
+			path = "echo " + request["Body"] + ">" + data.params->operator[]("uploads_dir") + lines["Path"];
 			system(path.c_str());
 		}
 	}
@@ -124,10 +126,10 @@ char *req_put(std::map<std::string, std::string> request,
 	response = "HTTP/1.1 " + std::to_string(error) + errors[error] + "\nDate: " //date here
 	+ "Last-Modified" + "\nContent-Language: en\n" + "Content-Length: " + std::to_string(body.size()) + "\nContent-Type: text/html" +
 	"\n" + "Content-Location: "+ path + "\nServer: ft_webserv" + body;
-	return file.c_str();
+	return response.c_str();
 }
 
-char *req_delete(std::map<std::string, std::string> request,
+const char *req_delete(std::map<std::string, std::string> request,
 	std::map<std::string, std::string> lines, Data data, int error)
 {
 	std::string response;
@@ -135,14 +137,15 @@ char *req_delete(std::map<std::string, std::string> request,
 	std::ifstream fd;
 	int size;
 
-	if (data.params["search_dir"] != "")
-		path = data.params["search_dir"];
+	if (data.params->operator[]("search_dir") != "")
+		path = data.params->operator[]("search_dir");
 	file = path + lines["Path"];
 	fd.open(file);
 	std::cout << "file path :" + file << std::endl;
 	if (!fd.is_open())
 		error = 404;
-	fd.close(file);
+
+	fd.close();
 	file = "rm -f " + file;
 	system(file.c_str());
 	size = file.size();
@@ -154,34 +157,34 @@ char *req_delete(std::map<std::string, std::string> request,
 	response = "HTTP/1.1 " + std::to_string(error) + errors[error] + "\nDate: " //date here
 	+ "Last-Modified" + "\nContent-Language: en\n" + "Content-Length: " + std::to_string(response.length()) + "\nContent-Type: text/html" +
 	"\n" + "Content-Location: "+ path + "\nServer: ft_webserv" + response;
-	return file.c_str();
+	return response.c_str();
 }
 
-char *req_options(std::map<std::string, std::string> request,
+const char *req_options(std::map<std::string, std::string> request,
 	std::map<std::string, std::string> lines, Data data, int error)
 {
 	std::string response, allowed;
 
 	std::list<std::string>::iterator it = data.methods.begin();
-	for (; it != data.methods.end; it++)
+	for (; it != data.methods.end(); it++)
 	{
 		allowed = allowed + *it + ",";
 	}
 	response = "HTTP/1.1 " + std::to_string(error) + errors[error] + "\nDate: " //date here
 	+ "Last-Modified" + "Allowed: " + allowed + "\nContent-Language: en\n" + "Content-Length: " + std::to_string(request["request"].length()) + "\nContent-Type: httpd/unix-directory" +
-	"\n" + "Content-Location: "+ path + "\nServer: ft_webserv";
+	"\n" + "\nServer: ft_webserv";
 
 	return response.c_str();
 }
 
-char *req_trace(std::map<std::string, std::string> request,
+const char *req_trace(std::map<std::string, std::string> request,
 	std::map<std::string, std::string> lines, Data data, int error)
 {
 	std::string response;
 
 	response = "HTTP/1.1 " + std::to_string(error) + errors[error] + "\nDate: " //date here
 	+ "Last-Modified" + "\nContent-Language: en\n" + "Content-Length: " + std::to_string(request["request"].length()) + "\nContent-Type: message/http" +
-	"\n" + "Content-Location: "+ path + "\nServer: ft_webserv";
+	"\n" + "\nServer: ft_webserv";
 	if (error == 200)
 		response = response + request["request"];
 

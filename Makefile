@@ -16,8 +16,8 @@ NAME = serv
 all: $(NAME)
 
 $(NAME) :
-	clang++ -std=c++11 http_serv.cpp init.cpp Data.cpp process.cpp requests.cpp slct_loop.cpp -o serv
+	clang++ -std=c++11 http_serv.cpp init.cpp Data.cpp process.cpp requests.cpp slct_loop.cpp parse.cpp utils.cpp -o serv
 
 re :
 	rm -f serv
-	clang++ -std=c++11 http_serv.cpp init.cpp Data.cpp process.cpp requests.cpp slct_loop.cpp -o serv
+	clang++ -std=c++11 http_serv.cpp init.cpp Data.cpp process.cpp requests.cpp slct_loop.cpp parse.cpp utils.cpp -o serv
