@@ -1,52 +1,71 @@
 # Webserver
 ## IMPORTANT : This server uses system() for POST, PUT and DELETE requests, and therefore is NOT SECURE.
 
-In this project we learn a little bit of networking and socket programming. The goal is to implement a sever that is able to take various kind of requests.
+## Introduction	
+The Hypertext Transfer Protocol (HTTP) is an application protocol for distributed, collaborative, hypermedia information systems.	
+HTTP is the foundation of data communication for the World Wide Web, where hypertext documents include hyperlinks to other resources that the user can easily access, for example by a mouse click or by tapping the screen in a web browser.	
+HTTP was developed to facilitate hypertext and the World Wide Web.	
+The primary function of a web server is to store, process, and deliver web pages to clients.	
+The communication between client and server takes place using the Hypertext Transfer Protocol (HTTP).	
 
-This project was done for learning purposes only, and in a bit of a rush so beware.
+Pages delivered are most frequently HTML documents, which may include images, style sheets, and scripts in addition to the text content.	
 
-There is not much to this readme, so here are some notes and logs from the project
+Multiple web servers may be used for a high traffic website.	
 
-```
-There is still a lot to do...
-Most of the parsing could use with some more error checking.
-I have yet to test if the error pages are handled correctly, but for that I need to create default erro pages first
-Tomorrow if I don't spend my time doing math, I will look at CGI and create the erro pages (this second bit shouldmt take long, although I don't have internet to find examples)
-I might also work on limiting body size, although as of now I am not quite sure what that means.
-Need to talk to the group about the default parameters and update them on my progress and define a course of action since internet will be down for 3 more days.
-Time is running out
+A user agent, commonly a web browser or web crawler, initiates communication by making a request for a specific resource using HTTP and the server responds with the content of that resource or an error message if unable to do so. The resource is typically a real file on the server's secondary storage, but this is not necessarily the case and depends on how the webserver is implemented.	
 
+While the primary function is to serve content, full implementation of HTTP also includes ways of receiving content from clients. This feature is used for submitting web forms, including uploading of files.	
 
----------------------------------------------------------------------------
+## Instructions	
+Make sure you have the needed [dependencies](#dependencies) before proceeding.	
+For instructions and/or greater detail refer to the project [pdf][pdf]	
+## Mandatory part	
+It must be conditionally compliant with the rfc 7230 to 7235 (http 1.1) but you need to implement only the following headers	
+- [x] Accept-Charsets	
+- [x] Accept-Language	
+- [x] Allow	
+- [x] Autho4rization	
+- [x] Content-Language	
+- [x] Content-Length	
+- [x] Content-Location	
+- [x] Content-Type	
+- [x] Date	
+- [x] Host	
+- [x] Last-Modified	
+- [x] Location	
+- [x] Referer	
+- [x] Retry-After	
+- [x] Server	
+- [x] Transfer-Encoding	
+- [x] User-Agent	
+- [x] WWW-Authenticate	
 
-THoughts about error pages :
-	Since we need default error pages anyways, I migth as well just have an int,str map with
-the error and its default value and change it if needed when parsing. It seems like the best solutio but I have to think about it more.
-Need to talk about all the other default values. Can't wait to be done and work on my own things
-~~Impossible to find one decent example of error page, everything is stupid feelsgood pages with too much embelisshment. Also impossible to inspect
-standard error page from my phone. I will delegate this task to someone that has access to a computer.
-I guess now I need to work on CGI and body_size
+We will consider that nginx is HTTP 1.1 compliant and may be used to compare headers and answer behaviors	
+- [x] It must be non-blocking and use only 1 select for all the IO between the client and the server (listens includes). [kosehy]	
+- [x] Select should check read and write at the same time.	
+- [X] Your server should never block and client should be bounce properly if necessary	
+- [x] You should never do a read operation or a write operation without going through select	
+- [x] Checking the value of errno is strictly forbidden after a read or a write operation	
+- [x] A request to your server should never hang forever	
+- [x] Your server should have default error pages if none are provided	
+- [x] Your program should not leak and should never crash, even when out of memory if all the initialization is done	
+- [x] You can't use fork for something else than CGI (like php or perl or ruby etc...)	
+- [x] You can include and use everything in "iostream" "string" "vector" "list" "queue" "stack" "map" "algorithm"	
+- [x] Your program should have a config file in argument or use a default path	
+- [x] You can only use fcntl as flow: fcntl(fd, F_SETFL, O_NONBLOCK); Any other flags is forbidden	
 
---------------------------------------------------------------------------
+In the config file, you shoul be able to :	
+- [x] choose the port and host of each "server"	
+- [x] setup the server_names or not	
+- [x] The first server for a host:port will be the default for this host:port (meaning it will answer to all request that doesn't belong to the other server)	
+- [x] setup default error pages	
+- [x] limit client body size	
 
-I now understand everything about webserver. Plan is as follows :
+## Bonus part	
 
-Today :
-	-Improve the parsing, it is incomplete at best. <- fakew news, request parsing is fine. COnfig parsing can be improved still
-	-Inplement the methods : []GET []POST []HEAD []PUT []DELETE []CONNECT []OPTIONS []TRACE
-Tomorrow :
-	- Work on return message ;
-	- Implement CGI
-	- Rest of the stuff under the config part part of the pdf
-
-Please discard the above. Started working on response as I realized that implementing the methods implies implementing response;
-
-FOr the error pages, I'm debating whether I should make a map of every single error and their path
-and replace the ones specified in the config file or make a map with only what is specified.
------------------------------------------------------------------------------
-Decided to go with the first option. I am done for my part, however,I am using system for post, put and delete request... which is less than secure
-Need to add scurity warning to readme. Might fix it later, but most likely not, I have other things to do.
-```
+## Dependencies	
+* A C language compiler most codmmon would be GCC or Clang.	
+* These were written to run on Unix based systems, it would likely work on a windows machine too but is currently untested.
 
 ### Warning For 42 Students
 
